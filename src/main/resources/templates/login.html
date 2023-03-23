@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <link href="/static/css/login.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <div class="login-wrapper">
+        <div class="header">Login</div>
+        <div class="form-wrapper">
+            <input type="text" name="username" placeholder="用户名" class="input-item" required="required">
+            <input type="password" name="password" placeholder="密码" class="input-item" required="required">
+            <div style="display: flex; justify-content: space-around; font-size: 18px">
+                <span>
+                    <input type="checkbox" name="rememberMe"/>记住我</p>
+                </span>
+                <a th:href="@{/15}">忘记密码？</a>
+            </div>
+            <input type="submit" onclick="login()" class="btn" value="登录"></input>
+        </div>
+        <div class="zhuche">
+            <hr class="MuiDivider-root w-32">
+            <span class="font-semibold mx-8" style="font-size: 20px;">快捷注册</span>
+            <hr class="MuiDivider-root w-32">
+        </div>
+        <div class="register">
+            <a href="/auth/register" type="button">
+                <span class="register-label">立即注册</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+</body>
+<script>
+    function login() {
+        var username = $("input[name='username']").val();
+        var password = $("input[name='password']").val();
+        var rememberMe = $("input[name = 'rememberMe']").is(':checked');
+        $.ajax({
+            type: "post",
+            url: "/login",
+            data: {"username": username, "password": password, "rememberMe": rememberMe},
+            dataType: "text",
+            success: function (r) {
+                console.log(r)
+                var t = JSON.parse(r)
+                if (t.status == 200) {
+                    location.href = "index"
+                } else {
+                    alert(t.message)
+                }
+            },
+            fail: function (r) {
+                console.log("失败")
+            },
+            error: function (r) {
+                console.log("出错")
+                console.log(r)
+            }
+        });
+    }
+</script>
+
+</html>
